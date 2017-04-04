@@ -1,0 +1,450 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/trentm/json#readme"
+
+    >json (v9.0.6)</a>
+</h1>
+<h4>a 'json' command for massaging and processing JSON on the command line</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.json">module json</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json.getVersion">
+            function <span class="apidocSignatureSpan">json.</span>getVersion
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json.lookupDatum">
+            function <span class="apidocSignatureSpan">json.</span>lookupDatum
+            <span class="apidocSignatureSpan">(datum, lookup)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json.main">
+            function <span class="apidocSignatureSpan">json.</span>main
+            <span class="apidocSignatureSpan">(argv)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json.parseLookup">
+            function <span class="apidocSignatureSpan">json.</span>parseLookup
+            <span class="apidocSignatureSpan">(lookup, lookupDelim)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.json.printDatum">
+            function <span class="apidocSignatureSpan">json.</span>printDatum
+            <span class="apidocSignatureSpan">(datum, opts, sep, alwaysPrintSep)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.json" id="apidoc.module.json">module json</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.json.getVersion" id="apidoc.element.json.getVersion">
+        function <span class="apidocSignatureSpan">json.</span>getVersion
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function getVersion() {
+    return VERSION;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json.lookupDatum" id="apidoc.element.json.lookupDatum">
+        function <span class="apidocSignatureSpan">json.</span>lookupDatum
+        <span class="apidocSignatureSpan">(datum, lookup)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function lookupDatum(datum, lookup) {
+    var d = datum;
+    for (var i = 0; i &#x3c; lookup.length; i++) {
+        var bit = lookup[i];
+        if (d === null) {
+            return undefined;
+        } else if (typeof (bit) === &#x27;number&#x27; &#x26;&#x26; bit &#x3c; 0) {
+            d = d[d.length + bit];
+        } else {
+            d = d[bit];
+        }
+        if (d === undefined) {
+            return undefined;
+        }
+    }
+    return d;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json.main" id="apidoc.element.json.main">
+        function <span class="apidocSignatureSpan">json.</span>main
+        <span class="apidocSignatureSpan">(argv)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function main(argv) {
+    var opts;
+    try {
+        opts = parseArgv(argv);
+    } catch (e) {
+        warn(&#x27;json: error: %s&#x27;, e.message)
+        return drainStdoutAndExit(1);
+    }
+    //warn(opts);
+    if (opts.help) {
+        printHelp();
+        return;
+    }
+    if (opts.version) {
+        if (opts.outputMode === OM_JSON) {
+            var v = {
+                version: getVersion(),
+                author: &#x27;Trent Mick&#x27;,
+                project: &#x27;https://github.com/trentm/json&#x27;
+            };
+            console.log(JSON.stringify(v, null, opts.jsonIndent));
+        } else {
+            console.log(&#x27;json &#x27; + getVersion());
+            console.log(&#x27;written by Trent Mick&#x27;);
+            console.log(&#x27;https://github.com/trentm/json&#x27;);
+        }
+        return;
+    }
+    var lookupStrs = opts.args;
+
+    // Prepare condition and execution funcs (and vm scripts) for -c/-e.
+    var execVm = Boolean(process.env.JSON_EXEC &#x26;&#x26;
+        process.env.JSON_EXEC === &#x27;vm&#x27;);
+    var i;
+    var condFuncs = [];
+    if (!execVm) {
+        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+            condFuncs[i] = funcWithReturnFromSnippet(opts.condSnippets[i]);
+        }
+    }
+    var condScripts = [];
+    if (execVm) {
+        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+            condScripts[i] = vm.createScript(opts.condSnippets[i]);
+        }
+    }
+    var cond = Boolean(condFuncs.length + condScripts.length);
+    var exeFuncs = [];
+    if (!execVm) {
+        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+            exeFuncs[i] = new Function(opts.exeSnippets[i]);
+        }
+    }
+    var exeScripts = [];
+    if (execVm) {
+        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+            exeScripts[i] = vm.createScript(opts.exeSnippets[i]);
+        }
+    }
+    var exe = Boolean(exeFuncs.length + exeScripts.length);
+
+    var lookups = lookupStrs.map(function (lookup) {
+        return parseLookup(lookup, opts.lookupDelim);
+    });
+
+    if (opts.group &#x26;&#x26; opts.array &#x26;&#x26; opts.outputMode !== OM_JSON) {
+        // streaming
+        var chunker = chunkEmitter(opts);
+        chunker.on(&#x27;error&#x27;, function (error) {
+            warn(&#x27;json: error: %s&#x27;, err.message);
+            return drainStdoutAndExit(1);
+        });
+        chunker.on(&#x27;chunk&#x27;, parseChunk);
+    } else if (opts.inPlace) {
+        assert.equal(opts.inputFiles.length, 1,
+            &#x27;cannot handle more than one file with -I&#x27;);
+        getInput(opts, function (err, content, filename) {
+            if (err) {
+                warn(&#x27;json: error: %s&#x27;, err.message)
+                return drainStdoutAndExit(1);
+            }
+
+            // Take off a leading HTTP header if any and pass it through.
+            var headers = [];
+            while (true) {
+                if (content.slice(0, 5) === &#x27;HTTP/&#x27;) {
+                    var index = content.indexOf(&#x27;\r\n\r\n&#x27;);
+                    var sepLen = 4;
+                    if (index == -1) {
+                        index = content.indexOf(&#x27;\n\n&#x27;);
+                        sepLen = 2;
+                    }
+                    if (index != -1) {
+                        if (!opts.dropHeaders) {
+                            headers.push(content.slice(0, index + sepLen));
+                        }
+                        var is100Continue = (
+                            content.slice(0, 21) === &#x27;HTTP/1.1 100 Continue&#x27;);
+                        content = content.slice(index + sepLen);
+                        if (is100Continue) {
+                            continue;
+                        }
+                    }
+                }
+                break;
+            }
+            parseChunk(content, undefined, filename, true, headers.join(&#x27;&#x27;));
+        });
+    } else {
+        // not streaming
+        getInput(opts, function (err, buffer, filename) {
+            if (err) {
+                warn(&#x27;json: error: %s&#x27;, err.message)
+                return drainStdoutAndExit(1);
+            }
+            // Take off a leading HTTP header if any and pass it through.
+            while (true) {
+                if (buffer.slice(0, 5) === &#x27;HTTP/&#x27;) { ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json.parseLookup" id="apidoc.element.json.parseLookup">
+        function <span class="apidocSignatureSpan">json.</span>parseLookup
+        <span class="apidocSignatureSpan">(lookup, lookupDelim)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function parseLookup(lookup, lookupDelim) {
+    var debug = function () {};
+    //var debug = console.warn;
+
+    var bits = [];
+    debug(&#x27;\n*** &#x27; + lookup + &#x27; ***&#x27;);
+
+    bits = [];
+    lookupDelim = lookupDelim || &#x27;.&#x27;;
+    var bit = &#x27;&#x27;;
+    var states = [null];
+    var escaped = false;
+    var ch = null;
+    for (var i = 0; i &#x3c; lookup.length; ++i) {
+        var escaped = (!escaped &#x26;&#x26; ch === &#x27;\\&#x27;);
+        var ch = lookup[i];
+        debug(&#x27;-- i=&#x27; + i + &#x27;, ch=&#x27; + JSON.stringify(ch) + &#x27; escaped=&#x27; +
+            JSON.stringify(escaped));
+        debug(&#x27;states: &#x27; + JSON.stringify(states));
+
+        if (escaped) {
+            bit += ch;
+            continue;
+        }
+
+        switch (states[states.length - 1]) {
+        case null:
+            switch (ch) {
+            case &#x27;&#x22;&#x27;:
+            case &#x27;\&#x27;&#x27;:
+                states.push(ch);
+                bit += ch;
+                break;
+            case &#x27;[&#x27;:
+                states.push(ch);
+                if (bit !== &#x27;&#x27;) {
+                    bits.push(bit);
+                    bit = &#x27;&#x27;
+                }
+                bit += ch;
+                break;
+            case lookupDelim:
+                if (bit !== &#x27;&#x27;) {
+                    bits.push(bit);
+                    bit = &#x27;&#x27;
+                }
+                break;
+            default:
+                bit += ch;
+                break;
+            }
+            break;
+
+        case &#x27;[&#x27;:
+            bit += ch;
+            switch (ch) {
+            case &#x27;&#x22;&#x27;:
+            case &#x27;\&#x27;&#x27;:
+            case &#x27;[&#x27;:
+                states.push(ch);
+                break;
+            case &#x27;]&#x27;:
+                states.pop();
+                if (states[states.length - 1] === null) {
+                    var evaled = vm.runInNewContext(
+                        &#x27;(&#x27; + bit.slice(1, -1) + &#x27;)&#x27;, {}, &#x27;&#x3c;lookup&#x3e;&#x27;);
+                    bits.push(evaled);
+                    bit = &#x27;&#x27;
+                }
+                break;
+            }
+            break;
+
+        case &#x27;&#x22;&#x27;:
+            bit += ch;
+            switch (ch) {
+            case &#x27;&#x22;&#x27;:
+                states.pop();
+                if (states[states.length - 1] === null) {
+                    bits.push(bit);
+                    bit = &#x27;&#x27;
+                }
+                break;
+            }
+            break;
+
+        case &#x27;\&#x27;&#x27;:
+            bit += ch;
+            switch (ch) {
+            case &#x27;\&#x27;&#x27;:
+                states.pop();
+                if (states[states.length - 1] === null) {
+                    bits.push(bit);
+                    bit = &#x27;&#x27;
+                }
+                break;
+            }
+            break;
+        }
+        debug(&#x27;bit: &#x27; + JSON.stringify(bit));
+        debug(&#x27;bits: &#x27; + JSON.stringify(bits));
+    }
+
+    if (bit !== &#x27;&#x27;) {
+        bits.push(bit);
+        bit = &#x27;&#x27;
+    }
+
+    // Negative-intify: strings that are negative ints we change to a Number for
+    // special handling in `lookupDatum`: Python-style negative array indexing.
+    var negIntPat = /^-\d+$/;
+    for (var i = 0; i &#x3c; bits.length; i++) {
+        if (negIntPat.test(bits[i])) {
+            bits[i] = Number(bits[i]);
+        }
+    }
+
+    debug(JSON.stringify(lookup) + &#x27; -&#x3e; &#x27; + JSON.stringify(bits));
+    return bits
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.json.printDatum" id="apidoc.element.json.printDatum">
+        function <span class="apidocSignatureSpan">json.</span>printDatum
+        <span class="apidocSignatureSpan">(datum, opts, sep, alwaysPrintSep)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function printDatum(datum, opts, sep, alwaysPrintSep) {
+    var output = stringifyDatum(datum, opts);
+    if (output &#x26;&#x26; output.length) {
+        emit(output);
+        emit(sep);
+    } else if (alwaysPrintSep) {
+        emit(sep);
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
