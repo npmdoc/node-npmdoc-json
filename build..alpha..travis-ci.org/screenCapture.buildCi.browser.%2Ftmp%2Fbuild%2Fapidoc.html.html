@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/trentm/json#readme"
-
-    >json (v9.0.6)</a>
+    <a href="https://github.com/trentm/json#readme">json (v9.0.6)</a>
 </h1>
 <h4>a 'json' command for massaging and processing JSON on the command line</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.json">module json</a><ol>
 
@@ -258,11 +251,11 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function lookupDatum(datum, lookup) {
     var d = datum;
-    for (var i = 0; i &#x3c; lookup.length; i++) {
+    for (var i = 0; i &lt; lookup.length; i++) {
         var bit = lookup[i];
         if (d === null) {
             return undefined;
-        } else if (typeof (bit) === &#x27;number&#x27; &#x26;&#x26; bit &#x3c; 0) {
+        } else if (typeof (bit) === 'number' &amp;&amp; bit &lt; 0) {
             d = d[d.length + bit];
         } else {
             d = d[bit];
@@ -290,7 +283,7 @@
     try {
         opts = parseArgv(argv);
     } catch (e) {
-        warn(&#x27;json: error: %s&#x27;, e.message)
+        warn('json: error: %s', e.message)
         return drainStdoutAndExit(1);
     }
     //warn(opts);
@@ -302,45 +295,45 @@
         if (opts.outputMode === OM_JSON) {
             var v = {
                 version: getVersion(),
-                author: &#x27;Trent Mick&#x27;,
-                project: &#x27;https://github.com/trentm/json&#x27;
+                author: 'Trent Mick',
+                project: 'https://github.com/trentm/json'
             };
             console.log(JSON.stringify(v, null, opts.jsonIndent));
         } else {
-            console.log(&#x27;json &#x27; + getVersion());
-            console.log(&#x27;written by Trent Mick&#x27;);
-            console.log(&#x27;https://github.com/trentm/json&#x27;);
+            console.log('json ' + getVersion());
+            console.log('written by Trent Mick');
+            console.log('https://github.com/trentm/json');
         }
         return;
     }
     var lookupStrs = opts.args;
 
     // Prepare condition and execution funcs (and vm scripts) for -c/-e.
-    var execVm = Boolean(process.env.JSON_EXEC &#x26;&#x26;
-        process.env.JSON_EXEC === &#x27;vm&#x27;);
+    var execVm = Boolean(process.env.JSON_EXEC &amp;&amp;
+        process.env.JSON_EXEC === 'vm');
     var i;
     var condFuncs = [];
     if (!execVm) {
-        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+        for (i = 0; i &lt; opts.condSnippets.length; i++) {
             condFuncs[i] = funcWithReturnFromSnippet(opts.condSnippets[i]);
         }
     }
     var condScripts = [];
     if (execVm) {
-        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+        for (i = 0; i &lt; opts.condSnippets.length; i++) {
             condScripts[i] = vm.createScript(opts.condSnippets[i]);
         }
     }
     var cond = Boolean(condFuncs.length + condScripts.length);
     var exeFuncs = [];
     if (!execVm) {
-        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+        for (i = 0; i &lt; opts.exeSnippets.length; i++) {
             exeFuncs[i] = new Function(opts.exeSnippets[i]);
         }
     }
     var exeScripts = [];
     if (execVm) {
-        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+        for (i = 0; i &lt; opts.exeSnippets.length; i++) {
             exeScripts[i] = vm.createScript(opts.exeSnippets[i]);
         }
     }
@@ -350,31 +343,31 @@
         return parseLookup(lookup, opts.lookupDelim);
     });
 
-    if (opts.group &#x26;&#x26; opts.array &#x26;&#x26; opts.outputMode !== OM_JSON) {
+    if (opts.group &amp;&amp; opts.array &amp;&amp; opts.outputMode !== OM_JSON) {
         // streaming
         var chunker = chunkEmitter(opts);
-        chunker.on(&#x27;error&#x27;, function (error) {
-            warn(&#x27;json: error: %s&#x27;, err.message);
+        chunker.on('error', function (error) {
+            warn('json: error: %s', err.message);
             return drainStdoutAndExit(1);
         });
-        chunker.on(&#x27;chunk&#x27;, parseChunk);
+        chunker.on('chunk', parseChunk);
     } else if (opts.inPlace) {
         assert.equal(opts.inputFiles.length, 1,
-            &#x27;cannot handle more than one file with -I&#x27;);
+            'cannot handle more than one file with -I');
         getInput(opts, function (err, content, filename) {
             if (err) {
-                warn(&#x27;json: error: %s&#x27;, err.message)
+                warn('json: error: %s', err.message)
                 return drainStdoutAndExit(1);
             }
 
             // Take off a leading HTTP header if any and pass it through.
             var headers = [];
             while (true) {
-                if (content.slice(0, 5) === &#x27;HTTP/&#x27;) {
-                    var index = content.indexOf(&#x27;\r\n\r\n&#x27;);
+                if (content.slice(0, 5) === 'HTTP/') {
+                    var index = content.indexOf('\r\n\r\n');
                     var sepLen = 4;
                     if (index == -1) {
-                        index = content.indexOf(&#x27;\n\n&#x27;);
+                        index = content.indexOf('\n\n');
                         sepLen = 2;
                     }
                     if (index != -1) {
@@ -382,7 +375,7 @@
                             headers.push(content.slice(0, index + sepLen));
                         }
                         var is100Continue = (
-                            content.slice(0, 21) === &#x27;HTTP/1.1 100 Continue&#x27;);
+                            content.slice(0, 21) === 'HTTP/1.1 100 Continue');
                         content = content.slice(index + sepLen);
                         if (is100Continue) {
                             continue;
@@ -391,18 +384,18 @@
                 }
                 break;
             }
-            parseChunk(content, undefined, filename, true, headers.join(&#x27;&#x27;));
+            parseChunk(content, undefined, filename, true, headers.join(''));
         });
     } else {
         // not streaming
         getInput(opts, function (err, buffer, filename) {
             if (err) {
-                warn(&#x27;json: error: %s&#x27;, err.message)
+                warn('json: error: %s', err.message)
                 return drainStdoutAndExit(1);
             }
             // Take off a leading HTTP header if any and pass it through.
             while (true) {
-                if (buffer.slice(0, 5) === &#x27;HTTP/&#x27;) { ...</pre></li>
+                if (buffer.slice(0, 5) === 'HTTP/') { ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -420,20 +413,20 @@
     //var debug = console.warn;
 
     var bits = [];
-    debug(&#x27;\n*** &#x27; + lookup + &#x27; ***&#x27;);
+    debug('\n*** ' + lookup + ' ***');
 
     bits = [];
-    lookupDelim = lookupDelim || &#x27;.&#x27;;
-    var bit = &#x27;&#x27;;
+    lookupDelim = lookupDelim || '.';
+    var bit = '';
     var states = [null];
     var escaped = false;
     var ch = null;
-    for (var i = 0; i &#x3c; lookup.length; ++i) {
-        var escaped = (!escaped &#x26;&#x26; ch === &#x27;\\&#x27;);
+    for (var i = 0; i &lt; lookup.length; ++i) {
+        var escaped = (!escaped &amp;&amp; ch === '\\');
         var ch = lookup[i];
-        debug(&#x27;-- i=&#x27; + i + &#x27;, ch=&#x27; + JSON.stringify(ch) + &#x27; escaped=&#x27; +
+        debug('-- i=' + i + ', ch=' + JSON.stringify(ch) + ' escaped=' +
             JSON.stringify(escaped));
-        debug(&#x27;states: &#x27; + JSON.stringify(states));
+        debug('states: ' + JSON.stringify(states));
 
         if (escaped) {
             bit += ch;
@@ -443,23 +436,23 @@
         switch (states[states.length - 1]) {
         case null:
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
-            case &#x27;\&#x27;&#x27;:
+            case '"':
+            case '\'':
                 states.push(ch);
                 bit += ch;
                 break;
-            case &#x27;[&#x27;:
+            case '[':
                 states.push(ch);
-                if (bit !== &#x27;&#x27;) {
+                if (bit !== '') {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 bit += ch;
                 break;
             case lookupDelim:
-                if (bit !== &#x27;&#x27;) {
+                if (bit !== '') {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             default:
@@ -468,71 +461,71 @@
             }
             break;
 
-        case &#x27;[&#x27;:
+        case '[':
             bit += ch;
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
-            case &#x27;\&#x27;&#x27;:
-            case &#x27;[&#x27;:
+            case '"':
+            case '\'':
+            case '[':
                 states.push(ch);
                 break;
-            case &#x27;]&#x27;:
+            case ']':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     var evaled = vm.runInNewContext(
-                        &#x27;(&#x27; + bit.slice(1, -1) + &#x27;)&#x27;, {}, &#x27;&#x3c;lookup&#x3e;&#x27;);
+                        '(' + bit.slice(1, -1) + ')', {}, '&lt;lookup&gt;');
                     bits.push(evaled);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
 
-        case &#x27;&#x22;&#x27;:
+        case '"':
             bit += ch;
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
+            case '"':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
 
-        case &#x27;\&#x27;&#x27;:
+        case '\'':
             bit += ch;
             switch (ch) {
-            case &#x27;\&#x27;&#x27;:
+            case '\'':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
         }
-        debug(&#x27;bit: &#x27; + JSON.stringify(bit));
-        debug(&#x27;bits: &#x27; + JSON.stringify(bits));
+        debug('bit: ' + JSON.stringify(bit));
+        debug('bits: ' + JSON.stringify(bits));
     }
 
-    if (bit !== &#x27;&#x27;) {
+    if (bit !== '') {
         bits.push(bit);
-        bit = &#x27;&#x27;
+        bit = ''
     }
 
     // Negative-intify: strings that are negative ints we change to a Number for
     // special handling in `lookupDatum`: Python-style negative array indexing.
     var negIntPat = /^-\d+$/;
-    for (var i = 0; i &#x3c; bits.length; i++) {
+    for (var i = 0; i &lt; bits.length; i++) {
         if (negIntPat.test(bits[i])) {
             bits[i] = Number(bits[i]);
         }
     }
 
-    debug(JSON.stringify(lookup) + &#x27; -&#x3e; &#x27; + JSON.stringify(bits));
+    debug(JSON.stringify(lookup) + ' -&gt; ' + JSON.stringify(bits));
     return bits
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -549,7 +542,7 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function printDatum(datum, opts, sep, alwaysPrintSep) {
     var output = stringifyDatum(datum, opts);
-    if (output &#x26;&#x26; output.length) {
+    if (output &amp;&amp; output.length) {
         emit(output);
         emit(sep);
     } else if (alwaysPrintSep) {
@@ -612,11 +605,11 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function lookupDatum(datum, lookup) {
     var d = datum;
-    for (var i = 0; i &#x3c; lookup.length; i++) {
+    for (var i = 0; i &lt; lookup.length; i++) {
         var bit = lookup[i];
         if (d === null) {
             return undefined;
-        } else if (typeof (bit) === &#x27;number&#x27; &#x26;&#x26; bit &#x3c; 0) {
+        } else if (typeof (bit) === 'number' &amp;&amp; bit &lt; 0) {
             d = d[d.length + bit];
         } else {
             d = d[bit];
@@ -644,7 +637,7 @@
     try {
         opts = parseArgv(argv);
     } catch (e) {
-        warn(&#x27;json: error: %s&#x27;, e.message)
+        warn('json: error: %s', e.message)
         return drainStdoutAndExit(1);
     }
     //warn(opts);
@@ -656,45 +649,45 @@
         if (opts.outputMode === OM_JSON) {
             var v = {
                 version: getVersion(),
-                author: &#x27;Trent Mick&#x27;,
-                project: &#x27;https://github.com/trentm/json&#x27;
+                author: 'Trent Mick',
+                project: 'https://github.com/trentm/json'
             };
             console.log(JSON.stringify(v, null, opts.jsonIndent));
         } else {
-            console.log(&#x27;json &#x27; + getVersion());
-            console.log(&#x27;written by Trent Mick&#x27;);
-            console.log(&#x27;https://github.com/trentm/json&#x27;);
+            console.log('json ' + getVersion());
+            console.log('written by Trent Mick');
+            console.log('https://github.com/trentm/json');
         }
         return;
     }
     var lookupStrs = opts.args;
 
     // Prepare condition and execution funcs (and vm scripts) for -c/-e.
-    var execVm = Boolean(process.env.JSON_EXEC &#x26;&#x26;
-        process.env.JSON_EXEC === &#x27;vm&#x27;);
+    var execVm = Boolean(process.env.JSON_EXEC &amp;&amp;
+        process.env.JSON_EXEC === 'vm');
     var i;
     var condFuncs = [];
     if (!execVm) {
-        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+        for (i = 0; i &lt; opts.condSnippets.length; i++) {
             condFuncs[i] = funcWithReturnFromSnippet(opts.condSnippets[i]);
         }
     }
     var condScripts = [];
     if (execVm) {
-        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+        for (i = 0; i &lt; opts.condSnippets.length; i++) {
             condScripts[i] = vm.createScript(opts.condSnippets[i]);
         }
     }
     var cond = Boolean(condFuncs.length + condScripts.length);
     var exeFuncs = [];
     if (!execVm) {
-        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+        for (i = 0; i &lt; opts.exeSnippets.length; i++) {
             exeFuncs[i] = new Function(opts.exeSnippets[i]);
         }
     }
     var exeScripts = [];
     if (execVm) {
-        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+        for (i = 0; i &lt; opts.exeSnippets.length; i++) {
             exeScripts[i] = vm.createScript(opts.exeSnippets[i]);
         }
     }
@@ -704,31 +697,31 @@
         return parseLookup(lookup, opts.lookupDelim);
     });
 
-    if (opts.group &#x26;&#x26; opts.array &#x26;&#x26; opts.outputMode !== OM_JSON) {
+    if (opts.group &amp;&amp; opts.array &amp;&amp; opts.outputMode !== OM_JSON) {
         // streaming
         var chunker = chunkEmitter(opts);
-        chunker.on(&#x27;error&#x27;, function (error) {
-            warn(&#x27;json: error: %s&#x27;, err.message);
+        chunker.on('error', function (error) {
+            warn('json: error: %s', err.message);
             return drainStdoutAndExit(1);
         });
-        chunker.on(&#x27;chunk&#x27;, parseChunk);
+        chunker.on('chunk', parseChunk);
     } else if (opts.inPlace) {
         assert.equal(opts.inputFiles.length, 1,
-            &#x27;cannot handle more than one file with -I&#x27;);
+            'cannot handle more than one file with -I');
         getInput(opts, function (err, content, filename) {
             if (err) {
-                warn(&#x27;json: error: %s&#x27;, err.message)
+                warn('json: error: %s', err.message)
                 return drainStdoutAndExit(1);
             }
 
             // Take off a leading HTTP header if any and pass it through.
             var headers = [];
             while (true) {
-                if (content.slice(0, 5) === &#x27;HTTP/&#x27;) {
-                    var index = content.indexOf(&#x27;\r\n\r\n&#x27;);
+                if (content.slice(0, 5) === 'HTTP/') {
+                    var index = content.indexOf('\r\n\r\n');
                     var sepLen = 4;
                     if (index == -1) {
-                        index = content.indexOf(&#x27;\n\n&#x27;);
+                        index = content.indexOf('\n\n');
                         sepLen = 2;
                     }
                     if (index != -1) {
@@ -736,7 +729,7 @@
                             headers.push(content.slice(0, index + sepLen));
                         }
                         var is100Continue = (
-                            content.slice(0, 21) === &#x27;HTTP/1.1 100 Continue&#x27;);
+                            content.slice(0, 21) === 'HTTP/1.1 100 Continue');
                         content = content.slice(index + sepLen);
                         if (is100Continue) {
                             continue;
@@ -745,18 +738,18 @@
                 }
                 break;
             }
-            parseChunk(content, undefined, filename, true, headers.join(&#x27;&#x27;));
+            parseChunk(content, undefined, filename, true, headers.join(''));
         });
     } else {
         // not streaming
         getInput(opts, function (err, buffer, filename) {
             if (err) {
-                warn(&#x27;json: error: %s&#x27;, err.message)
+                warn('json: error: %s', err.message)
                 return drainStdoutAndExit(1);
             }
             // Take off a leading HTTP header if any and pass it through.
             while (true) {
-                if (buffer.slice(0, 5) === &#x27;HTTP/&#x27;) { ...</pre></li>
+                if (buffer.slice(0, 5) === 'HTTP/') { ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -774,20 +767,20 @@
     //var debug = console.warn;
 
     var bits = [];
-    debug(&#x27;\n*** &#x27; + lookup + &#x27; ***&#x27;);
+    debug('\n*** ' + lookup + ' ***');
 
     bits = [];
-    lookupDelim = lookupDelim || &#x27;.&#x27;;
-    var bit = &#x27;&#x27;;
+    lookupDelim = lookupDelim || '.';
+    var bit = '';
     var states = [null];
     var escaped = false;
     var ch = null;
-    for (var i = 0; i &#x3c; lookup.length; ++i) {
-        var escaped = (!escaped &#x26;&#x26; ch === &#x27;\\&#x27;);
+    for (var i = 0; i &lt; lookup.length; ++i) {
+        var escaped = (!escaped &amp;&amp; ch === '\\');
         var ch = lookup[i];
-        debug(&#x27;-- i=&#x27; + i + &#x27;, ch=&#x27; + JSON.stringify(ch) + &#x27; escaped=&#x27; +
+        debug('-- i=' + i + ', ch=' + JSON.stringify(ch) + ' escaped=' +
             JSON.stringify(escaped));
-        debug(&#x27;states: &#x27; + JSON.stringify(states));
+        debug('states: ' + JSON.stringify(states));
 
         if (escaped) {
             bit += ch;
@@ -797,23 +790,23 @@
         switch (states[states.length - 1]) {
         case null:
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
-            case &#x27;\&#x27;&#x27;:
+            case '"':
+            case '\'':
                 states.push(ch);
                 bit += ch;
                 break;
-            case &#x27;[&#x27;:
+            case '[':
                 states.push(ch);
-                if (bit !== &#x27;&#x27;) {
+                if (bit !== '') {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 bit += ch;
                 break;
             case lookupDelim:
-                if (bit !== &#x27;&#x27;) {
+                if (bit !== '') {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             default:
@@ -822,71 +815,71 @@
             }
             break;
 
-        case &#x27;[&#x27;:
+        case '[':
             bit += ch;
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
-            case &#x27;\&#x27;&#x27;:
-            case &#x27;[&#x27;:
+            case '"':
+            case '\'':
+            case '[':
                 states.push(ch);
                 break;
-            case &#x27;]&#x27;:
+            case ']':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     var evaled = vm.runInNewContext(
-                        &#x27;(&#x27; + bit.slice(1, -1) + &#x27;)&#x27;, {}, &#x27;&#x3c;lookup&#x3e;&#x27;);
+                        '(' + bit.slice(1, -1) + ')', {}, '&lt;lookup&gt;');
                     bits.push(evaled);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
 
-        case &#x27;&#x22;&#x27;:
+        case '"':
             bit += ch;
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
+            case '"':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
 
-        case &#x27;\&#x27;&#x27;:
+        case '\'':
             bit += ch;
             switch (ch) {
-            case &#x27;\&#x27;&#x27;:
+            case '\'':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
         }
-        debug(&#x27;bit: &#x27; + JSON.stringify(bit));
-        debug(&#x27;bits: &#x27; + JSON.stringify(bits));
+        debug('bit: ' + JSON.stringify(bit));
+        debug('bits: ' + JSON.stringify(bits));
     }
 
-    if (bit !== &#x27;&#x27;) {
+    if (bit !== '') {
         bits.push(bit);
-        bit = &#x27;&#x27;
+        bit = ''
     }
 
     // Negative-intify: strings that are negative ints we change to a Number for
     // special handling in `lookupDatum`: Python-style negative array indexing.
     var negIntPat = /^-\d+$/;
-    for (var i = 0; i &#x3c; bits.length; i++) {
+    for (var i = 0; i &lt; bits.length; i++) {
         if (negIntPat.test(bits[i])) {
             bits[i] = Number(bits[i]);
         }
     }
 
-    debug(JSON.stringify(lookup) + &#x27; -&#x3e; &#x27; + JSON.stringify(bits));
+    debug(JSON.stringify(lookup) + ' -&gt; ' + JSON.stringify(bits));
     return bits
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -903,7 +896,7 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function printDatum(datum, opts, sep, alwaysPrintSep) {
     var output = stringifyDatum(datum, opts);
-    if (output &#x26;&#x26; output.length) {
+    if (output &amp;&amp; output.length) {
         emit(output);
         emit(sep);
     } else if (alwaysPrintSep) {
@@ -929,11 +922,11 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function lookupDatum(datum, lookup) {
     var d = datum;
-    for (var i = 0; i &#x3c; lookup.length; i++) {
+    for (var i = 0; i &lt; lookup.length; i++) {
         var bit = lookup[i];
         if (d === null) {
             return undefined;
-        } else if (typeof (bit) === &#x27;number&#x27; &#x26;&#x26; bit &#x3c; 0) {
+        } else if (typeof (bit) === 'number' &amp;&amp; bit &lt; 0) {
             d = d[d.length + bit];
         } else {
             d = d[bit];
@@ -966,7 +959,7 @@
     try {
         opts = parseArgv(argv);
     } catch (e) {
-        warn(&#x27;json: error: %s&#x27;, e.message)
+        warn('json: error: %s', e.message)
         return drainStdoutAndExit(1);
     }
     //warn(opts);
@@ -978,45 +971,45 @@
         if (opts.outputMode === OM_JSON) {
             var v = {
                 version: getVersion(),
-                author: &#x27;Trent Mick&#x27;,
-                project: &#x27;https://github.com/trentm/json&#x27;
+                author: 'Trent Mick',
+                project: 'https://github.com/trentm/json'
             };
             console.log(JSON.stringify(v, null, opts.jsonIndent));
         } else {
-            console.log(&#x27;json &#x27; + getVersion());
-            console.log(&#x27;written by Trent Mick&#x27;);
-            console.log(&#x27;https://github.com/trentm/json&#x27;);
+            console.log('json ' + getVersion());
+            console.log('written by Trent Mick');
+            console.log('https://github.com/trentm/json');
         }
         return;
     }
     var lookupStrs = opts.args;
 
     // Prepare condition and execution funcs (and vm scripts) for -c/-e.
-    var execVm = Boolean(process.env.JSON_EXEC &#x26;&#x26;
-        process.env.JSON_EXEC === &#x27;vm&#x27;);
+    var execVm = Boolean(process.env.JSON_EXEC &amp;&amp;
+        process.env.JSON_EXEC === 'vm');
     var i;
     var condFuncs = [];
     if (!execVm) {
-        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+        for (i = 0; i &lt; opts.condSnippets.length; i++) {
             condFuncs[i] = funcWithReturnFromSnippet(opts.condSnippets[i]);
         }
     }
     var condScripts = [];
     if (execVm) {
-        for (i = 0; i &#x3c; opts.condSnippets.length; i++) {
+        for (i = 0; i &lt; opts.condSnippets.length; i++) {
             condScripts[i] = vm.createScript(opts.condSnippets[i]);
         }
     }
     var cond = Boolean(condFuncs.length + condScripts.length);
     var exeFuncs = [];
     if (!execVm) {
-        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+        for (i = 0; i &lt; opts.exeSnippets.length; i++) {
             exeFuncs[i] = new Function(opts.exeSnippets[i]);
         }
     }
     var exeScripts = [];
     if (execVm) {
-        for (i = 0; i &#x3c; opts.exeSnippets.length; i++) {
+        for (i = 0; i &lt; opts.exeSnippets.length; i++) {
             exeScripts[i] = vm.createScript(opts.exeSnippets[i]);
         }
     }
@@ -1026,31 +1019,31 @@
         return parseLookup(lookup, opts.lookupDelim);
     });
 
-    if (opts.group &#x26;&#x26; opts.array &#x26;&#x26; opts.outputMode !== OM_JSON) {
+    if (opts.group &amp;&amp; opts.array &amp;&amp; opts.outputMode !== OM_JSON) {
         // streaming
         var chunker = chunkEmitter(opts);
-        chunker.on(&#x27;error&#x27;, function (error) {
-            warn(&#x27;json: error: %s&#x27;, err.message);
+        chunker.on('error', function (error) {
+            warn('json: error: %s', err.message);
             return drainStdoutAndExit(1);
         });
-        chunker.on(&#x27;chunk&#x27;, parseChunk);
+        chunker.on('chunk', parseChunk);
     } else if (opts.inPlace) {
         assert.equal(opts.inputFiles.length, 1,
-            &#x27;cannot handle more than one file with -I&#x27;);
+            'cannot handle more than one file with -I');
         getInput(opts, function (err, content, filename) {
             if (err) {
-                warn(&#x27;json: error: %s&#x27;, err.message)
+                warn('json: error: %s', err.message)
                 return drainStdoutAndExit(1);
             }
 
             // Take off a leading HTTP header if any and pass it through.
             var headers = [];
             while (true) {
-                if (content.slice(0, 5) === &#x27;HTTP/&#x27;) {
-                    var index = content.indexOf(&#x27;\r\n\r\n&#x27;);
+                if (content.slice(0, 5) === 'HTTP/') {
+                    var index = content.indexOf('\r\n\r\n');
                     var sepLen = 4;
                     if (index == -1) {
-                        index = content.indexOf(&#x27;\n\n&#x27;);
+                        index = content.indexOf('\n\n');
                         sepLen = 2;
                     }
                     if (index != -1) {
@@ -1058,7 +1051,7 @@
                             headers.push(content.slice(0, index + sepLen));
                         }
                         var is100Continue = (
-                            content.slice(0, 21) === &#x27;HTTP/1.1 100 Continue&#x27;);
+                            content.slice(0, 21) === 'HTTP/1.1 100 Continue');
                         content = content.slice(index + sepLen);
                         if (is100Continue) {
                             continue;
@@ -1067,18 +1060,18 @@
                 }
                 break;
             }
-            parseChunk(content, undefined, filename, true, headers.join(&#x27;&#x27;));
+            parseChunk(content, undefined, filename, true, headers.join(''));
         });
     } else {
         // not streaming
         getInput(opts, function (err, buffer, filename) {
             if (err) {
-                warn(&#x27;json: error: %s&#x27;, err.message)
+                warn('json: error: %s', err.message)
                 return drainStdoutAndExit(1);
             }
             // Take off a leading HTTP header if any and pass it through.
             while (true) {
-                if (buffer.slice(0, 5) === &#x27;HTTP/&#x27;) { ...</pre></li>
+                if (buffer.slice(0, 5) === 'HTTP/') { ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -1101,20 +1094,20 @@
     //var debug = console.warn;
 
     var bits = [];
-    debug(&#x27;\n*** &#x27; + lookup + &#x27; ***&#x27;);
+    debug('\n*** ' + lookup + ' ***');
 
     bits = [];
-    lookupDelim = lookupDelim || &#x27;.&#x27;;
-    var bit = &#x27;&#x27;;
+    lookupDelim = lookupDelim || '.';
+    var bit = '';
     var states = [null];
     var escaped = false;
     var ch = null;
-    for (var i = 0; i &#x3c; lookup.length; ++i) {
-        var escaped = (!escaped &#x26;&#x26; ch === &#x27;\\&#x27;);
+    for (var i = 0; i &lt; lookup.length; ++i) {
+        var escaped = (!escaped &amp;&amp; ch === '\\');
         var ch = lookup[i];
-        debug(&#x27;-- i=&#x27; + i + &#x27;, ch=&#x27; + JSON.stringify(ch) + &#x27; escaped=&#x27; +
+        debug('-- i=' + i + ', ch=' + JSON.stringify(ch) + ' escaped=' +
             JSON.stringify(escaped));
-        debug(&#x27;states: &#x27; + JSON.stringify(states));
+        debug('states: ' + JSON.stringify(states));
 
         if (escaped) {
             bit += ch;
@@ -1124,23 +1117,23 @@
         switch (states[states.length - 1]) {
         case null:
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
-            case &#x27;\&#x27;&#x27;:
+            case '"':
+            case '\'':
                 states.push(ch);
                 bit += ch;
                 break;
-            case &#x27;[&#x27;:
+            case '[':
                 states.push(ch);
-                if (bit !== &#x27;&#x27;) {
+                if (bit !== '') {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 bit += ch;
                 break;
             case lookupDelim:
-                if (bit !== &#x27;&#x27;) {
+                if (bit !== '') {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             default:
@@ -1149,71 +1142,71 @@
             }
             break;
 
-        case &#x27;[&#x27;:
+        case '[':
             bit += ch;
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
-            case &#x27;\&#x27;&#x27;:
-            case &#x27;[&#x27;:
+            case '"':
+            case '\'':
+            case '[':
                 states.push(ch);
                 break;
-            case &#x27;]&#x27;:
+            case ']':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     var evaled = vm.runInNewContext(
-                        &#x27;(&#x27; + bit.slice(1, -1) + &#x27;)&#x27;, {}, &#x27;&#x3c;lookup&#x3e;&#x27;);
+                        '(' + bit.slice(1, -1) + ')', {}, '&lt;lookup&gt;');
                     bits.push(evaled);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
 
-        case &#x27;&#x22;&#x27;:
+        case '"':
             bit += ch;
             switch (ch) {
-            case &#x27;&#x22;&#x27;:
+            case '"':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
 
-        case &#x27;\&#x27;&#x27;:
+        case '\'':
             bit += ch;
             switch (ch) {
-            case &#x27;\&#x27;&#x27;:
+            case '\'':
                 states.pop();
                 if (states[states.length - 1] === null) {
                     bits.push(bit);
-                    bit = &#x27;&#x27;
+                    bit = ''
                 }
                 break;
             }
             break;
         }
-        debug(&#x27;bit: &#x27; + JSON.stringify(bit));
-        debug(&#x27;bits: &#x27; + JSON.stringify(bits));
+        debug('bit: ' + JSON.stringify(bit));
+        debug('bits: ' + JSON.stringify(bits));
     }
 
-    if (bit !== &#x27;&#x27;) {
+    if (bit !== '') {
         bits.push(bit);
-        bit = &#x27;&#x27;
+        bit = ''
     }
 
     // Negative-intify: strings that are negative ints we change to a Number for
     // special handling in `lookupDatum`: Python-style negative array indexing.
     var negIntPat = /^-\d+$/;
-    for (var i = 0; i &#x3c; bits.length; i++) {
+    for (var i = 0; i &lt; bits.length; i++) {
         if (negIntPat.test(bits[i])) {
             bits[i] = Number(bits[i]);
         }
     }
 
-    debug(JSON.stringify(lookup) + &#x27; -&#x3e; &#x27; + JSON.stringify(bits));
+    debug(JSON.stringify(lookup) + ' -&gt; ' + JSON.stringify(bits));
     return bits
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -1235,7 +1228,7 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function printDatum(datum, opts, sep, alwaysPrintSep) {
     var output = stringifyDatum(datum, opts);
-    if (output &#x26;&#x26; output.length) {
+    if (output &amp;&amp; output.length) {
         emit(output);
         emit(sep);
     } else if (alwaysPrintSep) {
@@ -1254,3 +1247,4 @@
     ]
 </div>
 </div>
+</body></html>
