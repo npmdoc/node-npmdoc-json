@@ -1,6 +1,6 @@
 # npmdoc-json
 
-#### api documentation for  [json (v9.0.6)](https://github.com/trentm/json#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-json.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-json) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-json.svg)](https://travis-ci.org/npmdoc/node-npmdoc-json)
+#### basic api documentation for  [json (v9.0.6)](https://github.com/trentm/json#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-json.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-json) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-json.svg)](https://travis-ci.org/npmdoc/node-npmdoc-json)
 
 #### a 'json' command for massaging and processing JSON on the command line
 
